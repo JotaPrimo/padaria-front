@@ -132,6 +132,13 @@
   gap: 10px;
 }
 
+.acoes-cell {
+  white-space: nowrap;
+}
+
+.btn-inativar { color: var(--mat-sys-error) !important; }
+.btn-reativar { color: var(--mat-sys-primary) !important; }
+
 /* ── CARDS (visíveis só em mobile) ──────────────────────────── */
 .cards-list {
   display: flex;

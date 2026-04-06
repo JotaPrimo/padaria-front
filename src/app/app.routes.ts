@@ -40,6 +40,14 @@ export const routes: Routes = [
             (m) => m.CadastrarUsuario
           ),
       },
+      {
+        path: 'usuarios/:id/editar',
+        canActivate: [adminGuard],
+        loadComponent: () =>
+          import('./features/usuarios/pages/editar-usuario/editar-usuario').then(
+            (m) => m.EditarUsuario
+          ),
+      },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
   },

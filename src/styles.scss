@@ -36,4 +36,14 @@ body {
   margin: 0;
   height: 100%;
 }
-/* You can add global styles to this file, and also import other style files */
+/* Snackbar: sucesso */
+.snack-success .mdc-snackbar__surface {
+  background-color: #1e7e34 !important;
+  color: #fff !important;
+}
+
+/* Snackbar: erro */
+.snack-error .mdc-snackbar__surface {
+  background-color: var(--mat-sys-error) !important;
+  color: var(--mat-sys-on-error) !important;
+}

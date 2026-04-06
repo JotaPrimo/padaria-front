@@ -17,10 +17,16 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { RouterLink } from '@angular/router';
 import { Usuario } from '../../models/usuario.model';
 import { UsuariosService } from '../../services/usuarios.service';
 import { AuthService } from '../../../auth/services/auth.service';
+import {
+  ConfirmDialogComponent,
+  ConfirmDialogData,
+} from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-listar-usuarios',
@@ -45,6 +51,8 @@ import { AuthService } from '../../../auth/services/auth.service';
 })
 export class ListarUsuarios implements OnInit {
   private readonly usuariosService = inject(UsuariosService);
+  private readonly dialog = inject(MatDialog);
+  private readonly snackBar = inject(MatSnackBar);
   readonly auth = inject(AuthService);
 
   readonly usuarios = signal<Usuario[]>([]);
@@ -71,7 +79,11 @@ export class ListarUsuarios implements OnInit {
     return this.filteredUsuarios().slice(start, start + this.pageSize());
   });
 
-  readonly displayedColumns = ['nome', 'email', 'role', 'ativo', 'createdAt'];
+  readonly displayedColumns = computed(() =>
+    this.auth.isAdmin()
+      ? ['nome', 'email', 'role', 'ativo', 'createdAt', 'acoes']
+      : ['nome', 'email', 'role', 'ativo', 'createdAt']
+  );
 
   ngOnInit() {
     this.carregarUsuarios();
@@ -93,6 +105,74 @@ export class ListarUsuarios implements OnInit {
         this.loading.set(false);
       },
     });
+  }
+
+  confirmarInativar(usuario: Usuario) {
+    this.dialog
+      .open(ConfirmDialogComponent, {
+        width: '400px',
+        data: {
+          title: 'Inativar usuário',
+          message: `Deseja inativar o usuário <strong>${usuario.nome}</strong>?`,
+          confirmLabel: 'Inativar',
+          confirmColor: 'warn',
+          icon: 'person_off',
+        } satisfies ConfirmDialogData,
+      })
+      .afterClosed()
+      .subscribe((confirmed) => {
+        if (!confirmed) return;
+        this.usuariosService.inativar(usuario.id).subscribe({
+          next: () => {
+            this.snackBar.open('Usuário inativado com sucesso.', 'Fechar', {
+              duration: 4000,
+              panelClass: 'snack-success',
+            });
+            this.carregarUsuarios();
+          },
+          error: (err) => {
+            const msg = err?.error?.message || 'Erro ao inativar usuário.';
+            this.snackBar.open(msg, 'Fechar', {
+              duration: 4000,
+              panelClass: 'snack-error',
+            });
+          },
+        });
+      });
+  }
+
+  confirmarReativar(usuario: Usuario) {
+    this.dialog
+      .open(ConfirmDialogComponent, {
+        width: '400px',
+        data: {
+          title: 'Reativar usuário',
+          message: `Deseja reativar o usuário <strong>${usuario.nome}</strong>?`,
+          confirmLabel: 'Reativar',
+          confirmColor: 'primary',
+          icon: 'person',
+        } satisfies ConfirmDialogData,
+      })
+      .afterClosed()
+      .subscribe((confirmed) => {
+        if (!confirmed) return;
+        this.usuariosService.reativar(usuario.id).subscribe({
+          next: () => {
+            this.snackBar.open('Usuário reativado com sucesso.', 'Fechar', {
+              duration: 4000,
+              panelClass: 'snack-success',
+            });
+            this.carregarUsuarios();
+          },
+          error: (err) => {
+            const msg = err?.error?.message || 'Erro ao reativar usuário.';
+            this.snackBar.open(msg, 'Fechar', {
+              duration: 4000,
+              panelClass: 'snack-error',
+            });
+          },
+        });
+      });
   }
 
   onFilter(value: string) {
