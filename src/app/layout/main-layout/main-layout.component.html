@@ -1,0 +1,69 @@
+<mat-sidenav-container class="sidenav-container">
+
+  <mat-sidenav
+    #sidenav
+    [mode]="isMobile() ? 'over' : 'side'"
+    [opened]="!isMobile()"
+    class="sidenav"
+  >
+    <!-- Logo -->
+    <div class="sidenav-header">
+      <mat-icon class="sidenav-logo-icon">bakery_dining</mat-icon>
+      <span class="sidenav-title">Padaria</span>
+    </div>
+
+    <mat-divider />
+
+    <!-- Navegação -->
+    <mat-nav-list>
+      @for (item of navItems; track item.route) {
+        <a
+          mat-list-item
+          [routerLink]="item.route"
+          routerLinkActive="nav-active"
+          (click)="onNavItemClick()"
+          [matTooltip]="item.label"
+          matTooltipPosition="right"
+        >
+          <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+          <span matListItemTitle>{{ item.label }}</span>
+        </a>
+      }
+    </mat-nav-list>
+
+    <!-- Rodapé do sidenav -->
+    <div class="sidenav-footer">
+      <mat-divider />
+      <div class="user-info">
+        <div class="user-avatar">{{ auth.user()?.nome?.charAt(0)?.toUpperCase() }}</div>
+        <div class="user-details">
+          <span class="user-name">{{ auth.user()?.nome }}</span>
+          <span class="user-role">{{ auth.user()?.role }}</span>
+        </div>
+      </div>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <!-- Toolbar -->
+    <mat-toolbar class="app-toolbar">
+      @if (isMobile()) {
+        <button mat-icon-button (click)="sidenav.toggle()" aria-label="Abrir menu">
+          <mat-icon>menu</mat-icon>
+        </button>
+      }
+      <span class="toolbar-title">Padaria</span>
+      <span class="spacer"></span>
+      <span class="toolbar-user">{{ auth.user()?.nome }}</span>
+      <button mat-icon-button (click)="auth.logout()" matTooltip="Sair" aria-label="Sair">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </mat-toolbar>
+
+    <!-- Conteúdo da página -->
+    <main class="main-content">
+      <router-outlet />
+    </main>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

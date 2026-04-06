@@ -1,3 +1,164 @@
 :host {
   display: block;
 }
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 16px 0;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--mat-sys-on-surface);
+}
+
+.page-content {
+  padding: 16px;
+}
+
+/* Estados: loading, erro, vazio */
+.state-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 48px 16px;
+  color: var(--mat-sys-on-surface-variant);
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+  }
+
+  p {
+    margin: 0;
+    font-size: 1rem;
+  }
+}
+
+.error-state {
+  color: var(--mat-sys-error);
+}
+
+/* Avatar inicial do nome */
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
+  font-weight: 600;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+/* Chips de role */
+.role-chip {
+  font-size: 0.75rem;
+}
+
+.role-chip.role-administrador {
+  background-color: var(--mat-sys-tertiary-container);
+  color: var(--mat-sys-on-tertiary-container);
+}
+
+.role-chip.role-funcionario {
+  background-color: var(--mat-sys-secondary-container);
+  color: var(--mat-sys-on-secondary-container);
+}
+
+/* Chips de status */
+.status-chip {
+  font-size: 0.75rem;
+}
+
+.status-chip.status-ativo {
+  background-color: #e6f4ea;
+  color: #1e7e34;
+}
+
+.status-chip.status-inativo {
+  background-color: #fce8e6;
+  color: #c62828;
+}
+
+/* Filtro */
+.filter-field {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+/* ── TABELA (visível só em tablet+) ─────────────────────────── */
+.table-wrapper {
+  display: none;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--mat-sys-level1);
+}
+
+.usuarios-table {
+  width: 100%;
+}
+
+.user-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ── CARDS (visíveis só em mobile) ──────────────────────────── */
+.cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.usuario-card {
+  width: 100%;
+}
+
+.card-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.card-date {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: var(--mat-sys-on-surface-variant);
+  margin: 0;
+
+  mat-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+  }
+}
+
+/* ── Breakpoint tablet (≥768px) ─────────────────────────────── */
+@media (min-width: 768px) {
+  .table-wrapper {
+    display: block;
+  }
+
+  .cards-list {
+    display: none;
+  }
+
+  .page-content {
+    padding: 24px;
+  }
+}

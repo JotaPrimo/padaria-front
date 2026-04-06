@@ -1,0 +1,139 @@
+$toolbar-height: 64px;
+$sidenav-width: 240px;
+
+.sidenav-container {
+  height: 100vh;
+}
+
+/* ── Sidenav ────────────────────────────────────────────────── */
+.sidenav {
+  width: $sidenav-width;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--mat-sys-surface-container-low);
+}
+
+.sidenav-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 16px 16px;
+  height: $toolbar-height;
+  box-sizing: border-box;
+}
+
+.sidenav-logo-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+  color: var(--mat-sys-primary);
+}
+
+.sidenav-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--mat-sys-on-surface);
+}
+
+/* Item ativo na nav */
+.nav-active {
+  background-color: var(--mat-sys-secondary-container) !important;
+  color: var(--mat-sys-on-secondary-container) !important;
+  border-radius: 28px;
+
+  mat-icon {
+    color: var(--mat-sys-on-secondary-container) !important;
+  }
+}
+
+mat-nav-list {
+  padding: 8px;
+
+  a[mat-list-item] {
+    border-radius: 28px;
+    margin-bottom: 2px;
+  }
+}
+
+/* Rodapé do sidenav */
+.sidenav-footer {
+  margin-top: auto;
+  padding-bottom: 8px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+}
+
+.user-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
+  font-weight: 600;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.user-name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--mat-sys-on-surface);
+}
+
+.user-role {
+  font-size: 0.75rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+/* ── Toolbar ────────────────────────────────────────────────── */
+.app-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  height: $toolbar-height;
+  box-shadow: var(--mat-sys-level2);
+}
+
+.toolbar-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.toolbar-user {
+  font-size: 0.875rem;
+  margin-right: 8px;
+  color: var(--mat-sys-on-surface-variant);
+
+  // Oculta em telas muito pequenas
+  @media (max-width: 480px) {
+    display: none;
+  }
+}
+
+/* ── Conteúdo principal ─────────────────────────────────────── */
+.main-content {
+  height: calc(100vh - #{$toolbar-height});
+  overflow-y: auto;
+}
