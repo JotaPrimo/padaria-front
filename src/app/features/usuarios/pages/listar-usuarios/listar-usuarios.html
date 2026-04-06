@@ -1,8 +1,16 @@
 <div class="page-header">
   <h2 class="page-title">Usuários</h2>
-  <button mat-icon-button (click)="carregarUsuarios()" matTooltip="Recarregar" aria-label="Recarregar lista">
-    <mat-icon>refresh</mat-icon>
-  </button>
+  <div class="page-header-actions">
+    @if (auth.isAdmin()) {
+      <button mat-flat-button routerLink="/usuarios/novo">
+        <mat-icon>person_add</mat-icon>
+        <span class="btn-label">Novo Usuário</span>
+      </button>
+    }
+    <button mat-icon-button (click)="carregarUsuarios()" matTooltip="Recarregar" aria-label="Recarregar lista">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
 </div>
 
 <div class="page-content">

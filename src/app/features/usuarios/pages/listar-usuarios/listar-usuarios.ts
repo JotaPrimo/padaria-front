@@ -17,8 +17,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { RouterLink } from '@angular/router';
 import { Usuario } from '../../models/usuario.model';
 import { UsuariosService } from '../../services/usuarios.service';
+import { AuthService } from '../../../auth/services/auth.service';
 
 @Component({
   selector: 'app-listar-usuarios',
@@ -35,6 +37,7 @@ import { UsuariosService } from '../../services/usuarios.service';
     MatCardModule,
     MatButtonModule,
     MatTooltipModule,
+    RouterLink,
   ],
   templateUrl: './listar-usuarios.html',
   styleUrl: './listar-usuarios.css',
@@ -42,6 +45,7 @@ import { UsuariosService } from '../../services/usuarios.service';
 })
 export class ListarUsuarios implements OnInit {
   private readonly usuariosService = inject(UsuariosService);
+  readonly auth = inject(AuthService);
 
   readonly usuarios = signal<Usuario[]>([]);
   readonly loading = signal(true);

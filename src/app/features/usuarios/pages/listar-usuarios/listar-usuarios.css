@@ -9,6 +9,23 @@
   padding: 16px 16px 0;
 }
 
+.page-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Oculta o label do botão em telas muito pequenas, mantém só o ícone */
+.btn-label {
+  display: none;
+}
+
+@media (min-width: 400px) {
+  .btn-label {
+    display: inline;
+  }
+}
+
 .page-title {
   margin: 0;
   font-size: 1.25rem;

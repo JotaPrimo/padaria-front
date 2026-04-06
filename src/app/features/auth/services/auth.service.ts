@@ -56,6 +56,10 @@ export class AuthService {
     return this._user() !== null;
   }
 
+  isAdmin(): boolean {
+    return this._user()?.role === 'ADMINISTRADOR';
+  }
+
   getToken(): string | null {
     if (isPlatformBrowser(this.platformId)) {
       return localStorage.getItem(TOKEN_KEY);

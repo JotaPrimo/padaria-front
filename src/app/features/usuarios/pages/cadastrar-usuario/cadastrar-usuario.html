@@ -1,0 +1,94 @@
+<div class="page-container">
+  <mat-card class="form-card">
+
+    <mat-card-header>
+      <div class="card-header">
+        <mat-icon class="header-icon">person_add</mat-icon>
+        <mat-card-title>Novo Funcionário</mat-card-title>
+        <mat-card-subtitle>Preencha os dados para cadastrar um novo usuário</mat-card-subtitle>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nome completo</mat-label>
+          <mat-icon matPrefix>person</mat-icon>
+          <input matInput formControlName="nome" placeholder="João Silva" autocomplete="name" />
+          @if (form.get('nome')?.hasError('required') && form.get('nome')?.touched) {
+            <mat-error>Nome é obrigatório</mat-error>
+          } @else if (form.get('nome')?.hasError('minlength') && form.get('nome')?.touched) {
+            <mat-error>Nome deve ter no mínimo 3 caracteres</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>E-mail</mat-label>
+          <mat-icon matPrefix>email</mat-icon>
+          <input matInput type="email" formControlName="email" placeholder="joao@padaria.com" autocomplete="email" />
+          @if (form.get('email')?.hasError('required') && form.get('email')?.touched) {
+            <mat-error>E-mail é obrigatório</mat-error>
+          } @else if (form.get('email')?.hasError('email') && form.get('email')?.touched) {
+            <mat-error>Informe um e-mail válido</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Perfil</mat-label>
+          <mat-icon matPrefix>badge</mat-icon>
+          <mat-select formControlName="role">
+            @for (r of roles; track r.value) {
+              <mat-option [value]="r.value">{{ r.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Senha</mat-label>
+          <input
+            matInput
+            [type]="showPassword() ? 'text' : 'password'"
+            formControlName="senha"
+            placeholder="••••••"
+            autocomplete="new-password"
+          />
+          <button mat-icon-button matSuffix type="button" (click)="togglePassword()"
+            [attr.aria-label]="showPassword() ? 'Ocultar senha' : 'Mostrar senha'">
+            <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          @if (form.get('senha')?.hasError('required') && form.get('senha')?.touched) {
+            <mat-error>Senha é obrigatória</mat-error>
+          } @else if (form.get('senha')?.hasError('minlength') && form.get('senha')?.touched) {
+            <mat-error>A senha deve ter no mínimo 6 caracteres</mat-error>
+          }
+        </mat-form-field>
+
+        @if (errorMessage()) {
+          <div class="error-message" role="alert">
+            <mat-icon>error_outline</mat-icon>
+            <span>{{ errorMessage() }}</span>
+          </div>
+        }
+
+        <div class="form-actions">
+          <button mat-stroked-button type="button" routerLink="/usuarios" [disabled]="loading()">
+            <mat-icon>arrow_back</mat-icon>
+            Voltar
+          </button>
+          <button mat-flat-button type="submit" class="save-button" [disabled]="loading()">
+            @if (loading()) {
+              <mat-spinner diameter="20" />
+              <span>Salvando...</span>
+            } @else {
+              <mat-icon>save</mat-icon>
+              <span>Salvar</span>
+            }
+          </button>
+        </div>
+
+      </form>
+    </mat-card-content>
+
+  </mat-card>
+</div>

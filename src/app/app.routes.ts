@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
+import { adminGuard } from './core/guards/admin.guard';
 
 export const routes: Routes = [
   {
@@ -29,6 +30,14 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/usuarios/pages/listar-usuarios/listar-usuarios').then(
             (m) => m.ListarUsuarios
+          ),
+      },
+      {
+        path: 'usuarios/novo',
+        canActivate: [adminGuard],
+        loadComponent: () =>
+          import('./features/usuarios/pages/cadastrar-usuario/cadastrar-usuario').then(
+            (m) => m.CadastrarUsuario
           ),
       },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
