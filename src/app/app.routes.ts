@@ -48,6 +48,20 @@ export const routes: Routes = [
             (m) => m.EditarUsuario
           ),
       },
+      {
+        path: 'pedidos',
+        loadComponent: () =>
+          import('./features/pedidos/pages/listar-pedidos/listar-pedidos').then(
+            (m) => m.ListarPedidos
+          ),
+      },
+      {
+        path: 'pedidos/novo',
+        loadComponent: () =>
+          import('./features/pedidos/pages/cadastrar-pedido/cadastrar-pedido').then(
+            (m) => m.CadastrarPedido
+          ),
+      },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
   },

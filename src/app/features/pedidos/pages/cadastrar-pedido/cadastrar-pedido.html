@@ -1,0 +1,129 @@
+<div class="page-container">
+  <mat-card class="form-card">
+
+    <mat-card-header>
+      <div class="card-header">
+        <mat-icon class="header-icon">receipt_long</mat-icon>
+        <mat-card-title>Novo Pedido</mat-card-title>
+        <mat-card-subtitle>Preencha os dados para cadastrar um pedido</mat-card-subtitle>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Cliente</mat-label>
+          <mat-icon matPrefix>person</mat-icon>
+          <input matInput formControlName="cliente" placeholder="Nome do cliente" autocomplete="off" />
+          @if (form.get('cliente')?.hasError('required') && form.get('cliente')?.touched) {
+            <mat-error>Cliente é obrigatório</mat-error>
+          } @else if (form.get('cliente')?.hasError('maxlength') && form.get('cliente')?.touched) {
+            <mat-error>Nome deve ter no máximo 255 caracteres</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Telefone</mat-label>
+          <mat-icon matPrefix>phone</mat-icon>
+          <input matInput formControlName="telefone" placeholder="(11) 99999-9999" autocomplete="off" />
+          @if (form.get('telefone')?.hasError('required') && form.get('telefone')?.touched) {
+            <mat-error>Telefone é obrigatório</mat-error>
+          } @else if (form.get('telefone')?.hasError('maxlength') && form.get('telefone')?.touched) {
+            <mat-error>Telefone deve ter no máximo 20 caracteres</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Data e hora de entrega</mat-label>
+          <mat-icon matPrefix>event</mat-icon>
+          <input matInput type="datetime-local" formControlName="dataHoraEntrega" />
+          @if (form.get('dataHoraEntrega')?.hasError('required') && form.get('dataHoraEntrega')?.touched) {
+            <mat-error>Data e hora de entrega são obrigatórios</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Descrição do pedido</mat-label>
+          <mat-icon matPrefix>description</mat-icon>
+          <textarea matInput formControlName="descricaoPedido" rows="3"
+            placeholder="Descreva o pedido detalhadamente"></textarea>
+          @if (form.get('descricaoPedido')?.hasError('required') && form.get('descricaoPedido')?.touched) {
+            <mat-error>Descrição é obrigatória</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Observação (opcional)</mat-label>
+          <mat-icon matPrefix>notes</mat-icon>
+          <textarea matInput formControlName="observacao" rows="2"
+            placeholder="Informações adicionais..."></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Valor do pedido</mat-label>
+          <mat-icon matPrefix>attach_money</mat-icon>
+          <input matInput type="number" formControlName="valorPedido" min="0.01" step="0.01"
+            placeholder="0,00" />
+          @if (form.get('valorPedido')?.hasError('required') && form.get('valorPedido')?.touched) {
+            <mat-error>Valor é obrigatório</mat-error>
+          } @else if (form.get('valorPedido')?.hasError('min') && form.get('valorPedido')?.touched) {
+            <mat-error>Valor deve ser maior que zero</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="toggle-field">
+          <mat-slide-toggle formControlName="pagamentoIntegral" color="primary">
+            Pagamento integral
+          </mat-slide-toggle>
+          <span class="toggle-hint">
+            @if (pagamentoIntegralSignal()) {
+              Pagamento será feito integralmente
+            } @else {
+              Pagamento parcial — informe o valor do adiantamento
+            }
+          </span>
+        </div>
+
+        @if (!pagamentoIntegralSignal()) {
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Valor do adiantamento</mat-label>
+            <mat-icon matPrefix>payments</mat-icon>
+            <input matInput type="number" formControlName="valorAdiantamento" min="0.01" step="0.01"
+              placeholder="0,00" />
+            @if (form.get('valorAdiantamento')?.hasError('required') && form.get('valorAdiantamento')?.touched) {
+              <mat-error>Adiantamento é obrigatório quando o pagamento não é integral</mat-error>
+            } @else if (form.get('valorAdiantamento')?.hasError('min') && form.get('valorAdiantamento')?.touched) {
+              <mat-error>Adiantamento deve ser maior que zero</mat-error>
+            }
+          </mat-form-field>
+        }
+
+        @if (errorMessage()) {
+          <div class="error-message" role="alert">
+            <mat-icon>error_outline</mat-icon>
+            <span>{{ errorMessage() }}</span>
+          </div>
+        }
+
+        <div class="form-actions">
+          <button mat-stroked-button type="button" routerLink="/pedidos" [disabled]="loading()">
+            <mat-icon>arrow_back</mat-icon>
+            Voltar
+          </button>
+          <button mat-flat-button type="submit" class="save-button" [disabled]="loading()">
+            @if (loading()) {
+              <mat-spinner diameter="20" />
+              <span>Salvando...</span>
+            } @else {
+              <mat-icon>save</mat-icon>
+              <span>Salvar</span>
+            }
+          </button>
+        </div>
+
+      </form>
+    </mat-card-content>
+
+  </mat-card>
+</div>

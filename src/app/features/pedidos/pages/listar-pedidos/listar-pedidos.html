@@ -1,0 +1,263 @@
+<div class="page-header">
+  <h2 class="page-title">Pedidos</h2>
+  <div class="page-header-actions">
+    <button mat-flat-button routerLink="/pedidos/novo">
+      <mat-icon>add</mat-icon>
+      <span class="btn-label">Novo Pedido</span>
+    </button>
+    <button mat-icon-button (click)="onBuscar()" matTooltip="Recarregar" aria-label="Recarregar lista">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
+</div>
+
+<div class="page-content">
+  <!-- Filtros -->
+  <mat-card>
+    <mat-card-header>Filtros de busca</mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="filterForm" (ngSubmit)="onBuscar()" class="filter-form">
+        <div class="filter-row">
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Cliente</mat-label>
+            <mat-icon matPrefix>search</mat-icon>
+            <input
+              matInput
+              formControlName="cliente"
+              placeholder="Buscar por cliente..."
+              autocomplete="off"
+            />
+            @if (filterForm.get('cliente')?.value) {
+              <button
+                matSuffix
+                mat-icon-button
+                type="button"
+                aria-label="Limpar"
+                (click)="filterForm.get('cliente')?.reset()"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="filter-field filter-field--sm">
+            <mat-label>Status</mat-label>
+            <mat-select formControlName="statusPedido">
+              <mat-option [value]="null">Todos</mat-option>
+              @for (s of STATUS_PEDIDO; track s) {
+                <mat-option [value]="s">{{ statusLabel(s) }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="filter-field filter-field--sm">
+            <mat-label>Pagamento</mat-label>
+            <mat-select formControlName="pagamentoPendente">
+              <mat-option [value]="null">Todos</mat-option>
+              <mat-option [value]="true">Pendente</mat-option>
+              <mat-option [value]="false">Integral</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="filter-row">
+          <mat-form-field appearance="outline" class="filter-field filter-field--date">
+            <mat-label>Entrega — início</mat-label>
+            <input
+              matInput
+              [matDatepicker]="pickerInicio"
+              formControlName="dataEntregaInicio"
+              placeholder="dd/mm/aaaa"
+            />
+            <mat-datepicker-toggle matIconSuffix [for]="pickerInicio" />
+            <mat-datepicker #pickerInicio />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="filter-field filter-field--date">
+            <mat-label>Entrega — fim</mat-label>
+            <input
+              matInput
+              [matDatepicker]="pickerFim"
+              formControlName="dataEntregaFim"
+              placeholder="dd/mm/aaaa"
+            />
+            <mat-datepicker-toggle matIconSuffix [for]="pickerFim" />
+            <mat-datepicker #pickerFim />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="filter-field filter-field--sm">
+            <mat-label>Cadastrado por</mat-label>
+            <mat-select formControlName="cadastradoPorId">
+              <mat-option [value]="null">Todos</mat-option>
+              @for (u of usuarios(); track u.id) {
+                <mat-option [value]="u.id">{{ u.nome }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="filter-actions">
+          <button mat-stroked-button type="button" (click)="onLimpar()">
+            <mat-icon>filter_alt_off</mat-icon>
+            Limpar
+          </button>
+          <button mat-flat-button type="submit" [disabled]="loading()">
+            <mat-icon>search</mat-icon>
+            Buscar
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Loading -->
+  @if (loading()) {
+    <div class="state-container">
+      <mat-spinner diameter="48" />
+      <p>Carregando pedidos...</p>
+    </div>
+  }
+
+  <!-- Erro -->
+  @if (!loading() && errorMessage()) {
+    <div class="state-container error-state">
+      <mat-icon>error_outline</mat-icon>
+      <p>{{ errorMessage() }}</p>
+      <button mat-flat-button (click)="onBuscar()">Tentar novamente</button>
+    </div>
+  }
+
+  <!-- Vazio -->
+  @if (!loading() && !errorMessage() && pedidos().length === 0) {
+    <div class="state-container">
+      <mat-icon>receipt_long</mat-icon>
+      <p>Nenhum pedido encontrado.</p>
+    </div>
+  }
+
+  @if (!loading() && !errorMessage() && pedidos().length > 0) {
+    <!-- Tabela (desktop) -->
+    <div class="table-wrapper">
+      <table mat-table [dataSource]="pedidos()" class="pedidos-table">
+        <ng-container matColumnDef="cliente">
+          <th mat-header-cell *matHeaderCellDef>Cliente</th>
+          <td mat-cell *matCellDef="let p">
+            <div class="cliente-cell">
+              <div class="avatar">{{ p.cliente.charAt(0).toUpperCase() }}</div>
+              <div class="cliente-info">
+                <span class="cliente-nome">{{ p.cliente }}</span>
+                @if (p.telefone) {
+                  <span class="cliente-tel">{{ p.telefone }}</span>
+                }
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="statusPedido">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let p">
+            <mat-chip [class]="statusClass(p.statusPedido)">
+              {{ statusLabel(p.statusPedido) }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="dataHoraEntrega">
+          <th mat-header-cell *matHeaderCellDef>Entrega</th>
+          <td mat-cell *matCellDef="let p">
+            <div class="entrega-cell">
+              <span>{{ p.dataHoraEntrega | date: 'dd/MM/yyyy' }}</span>
+              <span class="entrega-hora">{{ p.dataHoraEntrega | date: 'HH:mm' }}</span>
+              @if (p.atrasado) {
+                <mat-chip class="chip-atrasado">
+                  <mat-icon matChipAvatar>warning</mat-icon>
+                  Atrasado
+                </mat-chip>
+              }
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="valorPedido">
+          <th mat-header-cell *matHeaderCellDef>Valor</th>
+          <td mat-cell *matCellDef="let p">
+            <div class="valor-cell">
+              <span class="valor-total">{{ p.valorPedido | currency: 'BRL' }}</span>
+              @if (!p.pagamentoIntegral) {
+                <span class="valor-pendente"
+                  >Adiant.: {{ p.valorAdiantamento | currency: 'BRL' }}</span
+                >
+              }
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="atrasado">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let p"></td>
+        </ng-container>
+
+        <ng-container matColumnDef="cadastradoPor">
+          <th mat-header-cell *matHeaderCellDef>Cadastrado por</th>
+          <td mat-cell *matCellDef="let p">{{ p.cadastradoPor }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+
+    <!-- Cards (mobile) -->
+    <div class="cards-list">
+      @for (p of pedidos(); track p.id) {
+        <mat-card class="pedido-card">
+          <mat-card-header>
+            <div mat-card-avatar class="avatar">{{ p.cliente.charAt(0).toUpperCase() }}</div>
+            <mat-card-title>{{ p.cliente }}</mat-card-title>
+            <mat-card-subtitle>
+              <mat-chip [class]="statusClass(p.statusPedido)">{{
+                statusLabel(p.statusPedido)
+              }}</mat-chip>
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="card-info-row">
+              <mat-icon>event</mat-icon>
+              <span>{{ p.dataHoraEntrega | date: 'dd/MM/yyyy HH:mm' }}</span>
+              @if (p.atrasado) {
+                <mat-chip class="chip-atrasado chip-atrasado--sm">
+                  <mat-icon matChipAvatar>warning</mat-icon>
+                  Atrasado
+                </mat-chip>
+              }
+            </div>
+            <div class="card-info-row">
+              <mat-icon>payments</mat-icon>
+              <span class="valor-total">{{ p.valorPedido | currency: 'BRL' }}</span>
+              @if (!p.pagamentoIntegral) {
+                <span class="valor-pendente"
+                  >Adiant.: {{ p.valorAdiantamento | currency: 'BRL' }}</span
+                >
+              }
+            </div>
+            <div class="card-info-row">
+              <mat-icon>person</mat-icon>
+              <span>{{ p.cadastradoPor }}</span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+
+    <mat-paginator
+      [length]="totalElements()"
+      [pageSize]="pageSize()"
+      [pageIndex]="pageIndex()"
+      [pageSizeOptions]="[5, 10, 25]"
+      [showFirstLastButtons]="true"
+      (page)="onPage($event)"
+      aria-label="Selecionar página de pedidos"
+    />
+  }
+</div>
