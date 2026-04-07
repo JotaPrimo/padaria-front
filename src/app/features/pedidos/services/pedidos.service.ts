@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map } from 'rxjs';
-import { CadastrarPedidoRequest, CadastrarPedidoResponse, PedidoFiltro, PedidosPageData, PedidosResponse } from '../models/pedido.model';
+import { CadastrarPedidoRequest, CadastrarPedidoResponse, EditarPedidoRequest, EditarPedidoResponse, PedidoFiltro, PedidosPageData, PedidosResponse } from '../models/pedido.model';
 
 const API_URL = 'http://localhost:8080/api/v1/pedidos';
 
@@ -49,5 +49,15 @@ export class PedidosService {
 
   cadastrar(request: CadastrarPedidoRequest) {
     return this.http.post<CadastrarPedidoResponse>(API_URL, request);
+  }
+
+  getById(id: number) {
+    return this.http
+      .get<CadastrarPedidoResponse>(`${API_URL}/${id}`)
+      .pipe(map((r) => r.data));
+  }
+
+  editar(id: number, request: EditarPedidoRequest) {
+    return this.http.put<EditarPedidoResponse>(`${API_URL}/${id}`, request);
   }
 }

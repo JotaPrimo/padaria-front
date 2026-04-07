@@ -63,3 +63,21 @@ export interface CadastrarPedidoResponse {
   message: string;
   success: boolean;
 }
+
+export interface EditarPedidoRequest {
+  telefone: string;
+  dataHoraEntrega: string;
+  descricaoPedido: string;
+  observacao?: string | null;
+  statusPedido: StatusPedido;
+  valorPedido: number;
+  pagamentoIntegral: boolean;
+  valorAdiantamento?: number | null;
+  motivoCancelamento?: string | null;
+}
+
+export interface EditarPedidoResponse {
+  data: PedidoDTO;
+  message: string;
+  success: boolean;
+}

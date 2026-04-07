@@ -203,6 +203,20 @@
           <td mat-cell *matCellDef="let p">{{ p.cadastradoPor }}</td>
         </ng-container>
 
+        <ng-container matColumnDef="acoes">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let p">
+            <button
+              mat-icon-button
+              [routerLink]="['/pedidos', p.id, 'editar']"
+              matTooltip="Editar pedido"
+              aria-label="Editar pedido"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
@@ -246,6 +260,12 @@
               <span>{{ p.cadastradoPor }}</span>
             </div>
           </mat-card-content>
+          <mat-card-actions align="end">
+            <button mat-stroked-button [routerLink]="['/pedidos', p.id, 'editar']">
+              <mat-icon>edit</mat-icon>
+              Editar
+            </button>
+          </mat-card-actions>
         </mat-card>
       }
     </div>

@@ -75,6 +75,7 @@ export class ListarPedidos implements OnInit {
     'valorPedido',
     'atrasado',
     'cadastradoPor',
+    'acoes',
   ];
 
   filterForm = this.fb.group({

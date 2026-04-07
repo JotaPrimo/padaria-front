@@ -62,6 +62,13 @@ export const routes: Routes = [
             (m) => m.CadastrarPedido
           ),
       },
+      {
+        path: 'pedidos/:id/editar',
+        loadComponent: () =>
+          import('./features/pedidos/pages/editar-pedido/editar-pedido').then(
+            (m) => m.EditarPedido
+          ),
+      },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
   },

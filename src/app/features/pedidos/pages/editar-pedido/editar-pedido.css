@@ -1,0 +1,163 @@
+:host {
+  display: block;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.form-card {
+  width: 100%;
+}
+
+.card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 16px 0 8px;
+  text-align: center;
+}
+
+.header-icon {
+  font-size: 40px;
+  width: 40px;
+  height: 40px;
+  color: var(--mat-sys-primary);
+  margin-bottom: 8px;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  padding: 48px 0;
+}
+
+mat-card-content {
+  padding: 8px 16px 0;
+}
+
+/* Seção de informações somente leitura */
+.info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 12px 16px;
+  border: 1px solid var(--mat-sys-outline-variant, #e0e0e0);
+  border-radius: 4px;
+  background: var(--mat-sys-surface-container-low, #f5f5f5);
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.info-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: var(--mat-sys-on-surface-variant, #666);
+  flex-shrink: 0;
+}
+
+.info-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-label {
+  font-size: 0.72rem;
+  color: var(--mat-sys-on-surface-variant, #666);
+  line-height: 1.2;
+}
+
+.info-value {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--mat-sys-on-surface, #1a1a1a);
+}
+
+/* Grid do formulário */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  column-gap: 16px;
+}
+
+.col-span-2 {
+  grid-column: 1 / -1;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 4px;
+}
+
+/* Toggle de pagamento */
+.toggle-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  border: 1px solid var(--mat-sys-outline-variant, #e0e0e0);
+  border-radius: 4px;
+  background: var(--mat-sys-surface-container-low, #f5f5f5);
+}
+
+.toggle-hint {
+  font-size: 0.8rem;
+  color: var(--mat-sys-on-surface-variant, #666);
+  margin-top: 2px;
+}
+
+/* Banner de erro */
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  margin-bottom: 16px;
+  padding: 8px 12px;
+  background-color: var(--mat-sys-error-container);
+  color: var(--mat-sys-on-error-container);
+  border-radius: 4px;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+  padding-bottom: 8px;
+}
+
+.save-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Tablet: info em linha, grid 2 colunas */
+@media (min-width: 768px) {
+  mat-card-content {
+    padding: 8px 24px 0;
+  }
+
+  .info-section {
+    flex-direction: row;
+    gap: 32px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
